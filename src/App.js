@@ -7,10 +7,6 @@ import {
   Card,
 } from 'semantic-ui-react';
 
-import 'semantic-ui-css/semantic.min.css';
-
-import './App.css';
-
 const questions = [
   {
     question: 'What is the answer to life, the universe and everything?',
@@ -29,29 +25,26 @@ const questions = [
   }
 ];
 
-function useTimer(playing) {
+function useTimer(running) {
   const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (playing && timeLeft > 0) {
+      if (running && timeLeft > 0) {
         setTimeLeft(timeLeft - 1);
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [playing, timeLeft]);
+  }, [running, timeLeft]);
 
   return [timeLeft, setTimeLeft];
 }
 
-function App() {
+function useTriviaGame(timePerQuestion, amountOfQuestions) {
   const [playing, setPlaying] = useState(false);
   const [timeLeft, setTimeLeft] = useTimer(playing);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const timePerQuestion = 10;
-
-  const question = questions[currentQuestion];
 
   const startGame = () => {
     setPlaying(true);
@@ -59,7 +52,7 @@ function App() {
     setCurrentQuestion(0);
   };
   const nextQuestion = () => {
-    if (currentQuestion + 1 === questions.length) {
+    if (currentQuestion + 1 === amountOfQuestions) {
       setPlaying(false);
       setTimeLeft(0);
     } else {
@@ -71,6 +64,21 @@ function App() {
     setCurrentQuestion(0);
     setPlaying(false);
   };
+
+  return [playing, timeLeft, currentQuestion, startGame, nextQuestion, gameOver];
+}
+
+function App() {
+  const [
+    playing,
+    timeLeft,
+    currentQuestion,
+    startGame,
+    nextQuestion,
+    gameOver,
+  ] = useTriviaGame(10, questions.length);
+
+  const question = questions[currentQuestion];
 
   return (
     <>
