@@ -16,7 +16,6 @@ class App extends Component {
     playing: false,
     timeLeft: 0,
     currentQuestion: 0,
-    won: false,
   };
 
   componentDidMount() {
@@ -40,7 +39,7 @@ class App extends Component {
       playing: true,
       timeLeft: this.timePerQuestion,
       currentQuestion: 0,
-    })
+    });
   };
 
   nextQuestion = () => {
