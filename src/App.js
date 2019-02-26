@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Segment,
   Container,
@@ -46,24 +46,35 @@ function useTriviaGame(timePerQuestion, amountOfQuestions) {
   const [timeLeft, setTimeLeft] = useTimer(playing);
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  const startGame = () => {
-    setPlaying(true);
-    setTimeLeft(timePerQuestion);
-    setCurrentQuestion(0);
-  };
-  const nextQuestion = () => {
-    if (currentQuestion + 1 === amountOfQuestions) {
-      setPlaying(false);
-      setTimeLeft(0);
-    } else {
+  const startGame = useCallback(
+    () => {
+      setPlaying(true);
       setTimeLeft(timePerQuestion);
-      setCurrentQuestion(currentQuestion + 1);
-    }
-  };
-  const gameOver = () => {
-    setCurrentQuestion(0);
-    setPlaying(false);
-  };
+      setCurrentQuestion(0);
+    },
+    [timePerQuestion, setPlaying, setTimeLeft, setCurrentQuestion],
+  );
+
+  const nextQuestion = useCallback(
+    () => {
+      if (currentQuestion + 1 === amountOfQuestions) {
+        setPlaying(false);
+        setTimeLeft(0);
+      } else {
+        setTimeLeft(timePerQuestion);
+        setCurrentQuestion(currentQuestion + 1);
+      }
+    },
+    [timePerQuestion, currentQuestion, setPlaying, setTimeLeft, setCurrentQuestion],
+  );
+
+  const gameOver = useCallback(
+    () => {
+      setCurrentQuestion(0);
+      setPlaying(false);
+    },
+    [setCurrentQuestion, setPlaying],
+  );
 
   return [playing, timeLeft, currentQuestion, startGame, nextQuestion, gameOver];
 }
