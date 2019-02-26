@@ -112,9 +112,11 @@ class App extends Component {
             {(!playing && timeLeft > 0) && (
               <Header>Wrong! You lost 🙃</Header>
             )}
+            {(!playing && currentQuestion > 0) && (
+              <Header>🍕 YOU ARE A WINNER 🍕</Header>
+            )}
             {!playing && (
               <>
-                {currentQuestion > 0 && <Header>🍕 YOU ARE A WINNER 🍕</Header>}
                 <p>
                   {currentQuestion > 0 ? 'You won! Play again?' : 'Welcome to the awesome travia game!'}
                 </p>
